@@ -1,8 +1,8 @@
 import 'dart:developer';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:local_notification/widgets/notification_permission_alert.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 abstract class LocalNotificationServices {
@@ -14,7 +14,7 @@ abstract class LocalNotificationServices {
     log("Notification receive");
   }
 
-  static Future<void> init(BuildContext context) async {
+  static Future<void> init(String appName) async {
     const AndroidInitializationSettings androidInitializationSettings =
         AndroidInitializationSettings("@mipmap/ic_launcher");
     const DarwinInitializationSettings iOSInitializationSettings =
@@ -31,28 +31,36 @@ abstract class LocalNotificationServices {
       onDidReceiveBackgroundNotificationResponse: onDidReceiveNotification,
     );
 
-    final access = await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
-        ?.areNotificationsEnabled();
+    Permission notification = Permission.notification;
 
-    if (access == null) {
-      if (context.mounted) {
-        NotificationPermissionAlert.show(
-            context: context,
-            onAllowPress: () async {
-              await flutterLocalNotificationsPlugin
-                  .resolvePlatformSpecificImplementation<
-                      AndroidFlutterLocalNotificationsPlugin>()
-                  ?.requestNotificationsPermission();
-            });
-      }
+    if (await notification.isPermanentlyDenied) {
+      NotificationPermissionAlert.show(
+        appName: appName,
+        onAllowPress: () async {
+        await notification.request();
+        await flutterLocalNotificationsPlugin
+            .resolvePlatformSpecificImplementation<
+                AndroidFlutterLocalNotificationsPlugin>()
+            ?.requestNotificationsPermission();
+      }, onDenyPress: () {
+        openAppSettings();
+      });
+    } else if (await notification.isDenied) {
+      NotificationPermissionAlert.show(
+        appName: appName,
+        onAllowPress: () async {
+        await notification.request();
+        await flutterLocalNotificationsPlugin
+            .resolvePlatformSpecificImplementation<
+                AndroidFlutterLocalNotificationsPlugin>()
+            ?.requestNotificationsPermission();
+      });
     } else {
       log("Notification permission is granted");
     }
   }
 
-  static Future<void> showLocalNotification(String title, String body) async {
+  static Future<void> showLocalNotification(int id, String title, String body) async {
     const NotificationDetails platformChannelSpecifics = NotificationDetails(
         android: AndroidNotificationDetails(
           'instant_notification_channel_id',
@@ -63,7 +71,7 @@ abstract class LocalNotificationServices {
         iOS: DarwinNotificationDetails());
 
     await flutterLocalNotificationsPlugin.show(
-      0,
+      id,
       title,
       body,
       platformChannelSpecifics,
