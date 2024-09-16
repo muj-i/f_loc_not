@@ -1,4 +1,4 @@
-# f_loc_not
+# local_notification
 
 A new Flutter plugin project.
 
