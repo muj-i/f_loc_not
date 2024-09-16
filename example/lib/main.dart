@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:local_notification/local_notification.dart';
 
@@ -31,8 +31,8 @@ class _MyAppState extends State<MyApp> {
     // Platform messages may fail, so we use a try/catch PlatformException.
     // We also handle the message potentially returning null.
     try {
-      platformVersion =
-          await _localNotificationPlugin.getPlatformVersion() ?? 'Unknown platform version';
+      platformVersion = await _localNotificationPlugin.getPlatformVersion() ??
+          'Unknown platform version';
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
@@ -59,8 +59,8 @@ class _MyAppState extends State<MyApp> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            LocalNotification.init(context).then((value) {
-              LocalNotification.showLocalNotification('Title', 'Body');
+            LocalNotification.init('').then((value) {
+              LocalNotification.showLocalNotification(1, 'Title', 'Body');
             });
           },
           child: const Icon(Icons.no_accounts),
