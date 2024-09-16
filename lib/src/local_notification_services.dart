@@ -1,6 +1,8 @@
 import 'dart:developer';
 
+import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:local_notification/widgets/notification_permission_alert.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 abstract class LocalNotificationServices {
@@ -12,7 +14,7 @@ abstract class LocalNotificationServices {
     log("Notification receive");
   }
 
-  static Future<void> init() async {
+  static Future<void> init(BuildContext context) async {
     const AndroidInitializationSettings androidInitializationSettings =
         AndroidInitializationSettings("@mipmap/ic_launcher");
     const DarwinInitializationSettings iOSInitializationSettings =
@@ -29,14 +31,28 @@ abstract class LocalNotificationServices {
       onDidReceiveBackgroundNotificationResponse: onDidReceiveNotification,
     );
 
-    await flutterLocalNotificationsPlugin
+    final access = await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>()
-        ?.requestNotificationsPermission();
+        ?.areNotificationsEnabled();
+
+    if (access == null) {
+      if (context.mounted) {
+        NotificationPermissionAlert.show(
+            context: context,
+            onAllowPress: () async {
+              await flutterLocalNotificationsPlugin
+                  .resolvePlatformSpecificImplementation<
+                      AndroidFlutterLocalNotificationsPlugin>()
+                  ?.requestNotificationsPermission();
+            });
+      }
+    } else {
+      log("Notification permission is granted");
+    }
   }
 
-
-   static Future<void> showLocalNotification(String title, String body) async {
+  static Future<void> showLocalNotification(String title, String body) async {
     const NotificationDetails platformChannelSpecifics = NotificationDetails(
         android: AndroidNotificationDetails(
           'instant_notification_channel_id',
@@ -55,8 +71,8 @@ abstract class LocalNotificationServices {
     );
   }
 
-
-   static Future<void> scheduleNotification(int id, String title, String body, DateTime scheduledTime) async {
+  static Future<void> scheduleNotification(
+      int id, String title, String body, DateTime scheduledTime) async {
     await flutterLocalNotificationsPlugin.zonedSchedule(
       id,
       title,
@@ -71,7 +87,8 @@ abstract class LocalNotificationServices {
           priority: Priority.high,
         ),
       ),
-      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
       matchDateTimeComponents: DateTimeComponents.dateAndTime,
     );
   }

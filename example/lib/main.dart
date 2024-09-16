@@ -59,7 +59,7 @@ class _MyAppState extends State<MyApp> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            LocalNotification.init().then((value) {
+            LocalNotification.init(context).then((value) {
               LocalNotification.showLocalNotification('Title', 'Body');
             });
           },

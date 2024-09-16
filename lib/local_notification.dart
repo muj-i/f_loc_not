@@ -1,4 +1,4 @@
-
+import 'package:flutter/widgets.dart';
 import 'package:local_notification/src/local_notification_services.dart';
 
 import 'local_notification_platform_interface.dart';
@@ -8,8 +8,8 @@ class LocalNotification {
     return LocalNotificationPlatform.instance.getPlatformVersion();
   }
 
-  static Future<void> init() async {
-    return LocalNotificationServices.init();
+  static Future<void> init(BuildContext context) async {
+    return LocalNotificationServices.init(context);
   }
 
   static Future<void> showLocalNotification(String title, String body) async {
@@ -18,7 +18,8 @@ class LocalNotification {
 
   static Future<void> scheduleNotification(
       int id, String title, String body, DateTime scheduledTime) async {
-    return LocalNotificationServices.scheduleNotification(id, title, body, scheduledTime);
+    return LocalNotificationServices.scheduleNotification(
+        id, title, body, scheduledTime);
   }
 
   static Future<void> cancelNotification(int id) async {
