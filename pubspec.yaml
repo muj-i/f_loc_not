@@ -1,4 +1,4 @@
-name: f_loc_not
+name: local_notification
 description: "A new Flutter plugin project."
 version: 0.0.1
 homepage:
@@ -37,10 +37,10 @@ flutter:
   plugin:
     platforms:
       android:
-        package: com.example.f_loc_not
-        pluginClass: FLocNotPlugin
+        package: com.example.local_notification
+        pluginClass: LocalNotificationPlugin
       ios:
-        pluginClass: FLocNotPlugin
+        pluginClass: LocalNotificationPlugin
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:
