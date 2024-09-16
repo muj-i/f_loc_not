@@ -1,12 +1,12 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:f_loc_not/f_loc_not_method_channel.dart';
+import 'package:local_notification/local_notification_method_channel.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  MethodChannelFLocNot platform = MethodChannelFLocNot();
-  const MethodChannel channel = MethodChannel('f_loc_not');
+  MethodChannelLocalNotification platform = MethodChannelLocalNotification();
+  const MethodChannel channel = MethodChannel('local_notification');
 
   setUp(() {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
