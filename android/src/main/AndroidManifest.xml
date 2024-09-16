@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.f_loc_not">
+    package="com.example.local_notification">
 
     <!-- Permissions -->
     <uses-permission android:name="android.permission.VIBRATE"/>
