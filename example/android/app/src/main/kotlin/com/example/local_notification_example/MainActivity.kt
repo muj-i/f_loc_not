@@ -1,4 +1,4 @@
-package com.example.f_loc_not_example
+package com.example.local_notification_example
 
 import io.flutter.embedding.android.FlutterActivity
 

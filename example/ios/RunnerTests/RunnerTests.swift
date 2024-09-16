@@ -2,7 +2,7 @@ import Flutter
 import UIKit
 import XCTest
 
-@testable import f_loc_not
+@testable import local_notification
 
 // This demonstrates a simple unit test of the Swift portion of this plugin's implementation.
 //
@@ -11,7 +11,7 @@ import XCTest
 class RunnerTests: XCTestCase {
 
   func testGetPlatformVersion() {
-    let plugin = FLocNotPlugin()
+    let plugin = LocalNotificationPlugin()
 
     let call = FlutterMethodCall(methodName: "getPlatformVersion", arguments: [])
 

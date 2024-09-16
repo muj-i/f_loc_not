@@ -1,6 +1,6 @@
-# f_loc_not_example
+# local_notification_example
 
-Demonstrates how to use the f_loc_not plugin.
+Demonstrates how to use the local_notification plugin.
 
 ## Getting Started
 
